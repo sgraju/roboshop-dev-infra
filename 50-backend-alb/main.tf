@@ -3,9 +3,11 @@ resource "aws_lb" "backend_alb" {
   internal  = true
   load_balancer_type = "application"
   security_groups    = [local.backend_alb_sg_id]
-  subnets            = local.public_subnet_ids
 
-  enable_deletion_protection = true # prevents accidental deletion from UI
+  # it shoubd be private subnet ids
+  subnets            = local.private_subnet_ids
+
+  enable_deletion_protection = false # prevents accidental deletion from UI
 
   tags = merge (
     local.common_tags,
@@ -17,7 +19,7 @@ resource "aws_lb" "backend_alb" {
 
 # Backend ALB listening on port number 80
 resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.front_end.arn
+  load_balancer_arn = aws_lb.backend_alb.arn
   port              = "80"
   protocol          = "HTTP"
 

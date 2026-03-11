@@ -3,7 +3,7 @@ resource "aws_instance" "catalogue" {
   ami = local.ami_id
   instance_type = "t3.micro"
   vpc_security_group_ids = [local.catalogue_sg_id]
-  subnet_id = local.private_subnet_ids
+  subnet_id = local.private_subnet_id
   
   tags = merge (
     local.common_tags,
@@ -168,5 +168,26 @@ resource "aws_autoscaling_policy" "catalogue" {
     }
 
     target_value = 75.0
+  }
+}
+
+resource "aws_lb_listener_rule" "catalogue" {
+  listener_arn = local.backend_alb_listener_arn
+  priority = 10
+
+  action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.catalogue.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/static/*"]
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["example.com"]
+    }
   }
 }

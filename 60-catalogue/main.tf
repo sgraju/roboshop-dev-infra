@@ -179,15 +179,10 @@ resource "aws_lb_listener_rule" "catalogue" {
     type = "forward"
     target_group_arn = aws_lb_target_group.catalogue.arn
   }
-  condition {
-    path_pattern {
-      values = ["/static/*"]
-    }
-  }
 
   condition {
     host_header {
-      values = ["example.com"]
+      values = ["catalogue.backend-alb-${var.environment}.${var.domain_name}"]
     }
   }
 }

@@ -1,5 +1,5 @@
 variable "project_name" {
-    default = "roboshop"
+    default = "roboshop1"
 }
 
 variable "environment" {

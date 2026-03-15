@@ -3,7 +3,7 @@ variable "vpc_cidr" {
 }
 
 variable "project_name" {
-  default = "roboshop1"
+  default = "roboshop"
 }
 
 variable "environment" {
